@@ -1,20 +1,21 @@
 # Raspberry Pi Card Keyboard
 
-A script for using the M5Stack CardKB with Raspberry Pi
+A script for using the M5Stack CardKB with Raspberry Pi 5
 
-Items i used in the build:
-Monitor
-Wirelesss Keyboard and mouse
-CardKB V1.1
-Jumper Wires M-F (Male to Female)
+Items I used in the build:
+<ul><li>Monitor, </li>
+<li>Wirelesss Keyboard and mouse, </li> 
+<li>CardKB V1.1, </li>
+<li>Jumper Wires M-F (Male to Female)</li></ul>
 
-First id like to say thanks to ian-antking#4 and ViktorWalter
+First i'd like to say thanks to ian-antking#4 and ViktorWalter
 
-im going to use some of what they used right here and rearrange it the way that i did it to get it to work.
+I am going to use some of what they used right here in this git, and rearrange it the way that i did it to git it to work. (git it?) hehe
 
-next let me say i did all this using twister os but since it uses sudo it should not be much of an issue from say something like ubuntu or raspibian.
+Next let me say I did all this using TwisterOS but since it uses sudo it should not be much of an issue from say something like Ubuntu or Raspibian or anything else Debian.
 
-Lets start here:
+# Lets start here:
+
 ## Setting your pi to us layout
 
 In order for buttons to return the correct symbols, the keyboard layout will need to be set to us on you pi. You can do this by running:
@@ -53,10 +54,10 @@ You may need to improvise a connection solution with breadboard wires like so:
 ![Assembled a raspberry pi and hyperpixel](https://github.com/ian-antking/cardkb/blob/master/docs/assembled-pi-keyboard.jpg?raw=true)
 
 I Used male to female jumpers matching the colors of the wires coming from the cardkb. Below are the pins i used.
-Black Wire 3.3v/VCC CardKB - pin 1 Pi5
-Red Wire SDA CardKB - pin 3 Pi5
-Yellow Wire SCL CardKB - pin 5 Pi5
-White Wire Ground CardKB - pin 9 Pi5
+<ul><li>Black Wire 3.3v/VCC CardKB - pin 1 Pi5</li>
+<li>Red Wire SDA CardKB - pin 3 Pi5</li>
+<li>Yellow Wire SCL CardKB - pin 5 Pi5</li>
+<li>White Wire Ground CardKB - pin 9 Pi5</li>
 
 ## Install Software
 
@@ -74,12 +75,16 @@ sudo apt install python3-full
 sudo apt install python3-smbus
 ```
 
-To install uinput i had to installe synaptic package manager then do a manual search for uinput to install it. everytime i would install uinput through the terminal i would get an error and a message stating it was externally managed. so far this is the only way i found that worked.
+To install uinput I had to install synaptic package manager then do a manual search for uinput to install it. Everytime I would install uinput through the terminal I would get an error and a message stating it was externally managed. So far this is the only way I found that worked.
 
 ```bash
 sudo apt install synaptic
 ```
-then open synaptic and search for "python3-uinput"
+Then 
+
+open "synaptic package manager" and search for "python3-uinput" and install it.
+
+Return to the Terminal window.
 
 ## Clone the Git Repo
 
@@ -158,7 +163,7 @@ ExecStart=/usr/bin/python3 /home/pi/cardkb 11
 
 Save the file and exit. 
 
-Additional info to add
+Additional info to add...
 
 Note: I would like to Omit this part but if you need it, i will not leave it out. it was not neccessary for my setup.
 
