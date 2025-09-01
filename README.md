@@ -2,6 +2,19 @@
 
 A script for using the M5Stack CardKB with Raspberry Pi
 
+Items i used in the build:
+Monitor
+Wirelesss Keyboard and mouse
+CardKB V1.1
+Jumper Wires M-F (Male to Female)
+
+First id like to say thanks to ian-antking#4 and ViktorWalter
+
+im going to use some of what they used right here and rearrange it the way that i did it to get it to work.
+
+next let me say i did all this using twister os but since it uses sudo it should not be much of an issue from say something like ubuntu or raspibian.
+
+Lets start here:
 ## Setting your pi to us layout
 
 In order for buttons to return the correct symbols, the keyboard layout will need to be set to us on you pi. You can do this by running:
@@ -24,6 +37,7 @@ XKBOPTIONS=""
 
 BACKSPACE="guess"
 ```
+For me this was already done, so if it is already done you will be fine.
 
 ## Enable i2C
 The cardKB communicates over i2C, make sure this is enabled on your raspberry pi. You can find a tutorial on how to do so [here](https://www.raspberrypi-spy.co.uk/2014/11/enabling-the-i2c-interface-on-the-raspberry-pi/).
@@ -38,7 +52,44 @@ You may need to improvise a connection solution with breadboard wires like so:
 
 ![Assembled a raspberry pi and hyperpixel](https://github.com/ian-antking/cardkb/blob/master/docs/assembled-pi-keyboard.jpg?raw=true)
 
-## Load the uinput module
+I Used male to female jumpers matching the colors of the wires coming from the cardkb. Below are the pins i used.
+Black Wire 3.3v/VCC CardKB - pin 1 Pi5
+Red Wire SDA CardKB - pin 3 Pi5
+Yellow Wire SCL CardKB - pin 5 Pi5
+White Wire Ground CardKB - pin 9 Pi5
+
+## Install Software
+
+Install smbus, python, synaptic and uinput:
+
+```bash
+sudo apt install python3 2to3
+```
+
+```bash
+sudo apt install python3-full
+```
+
+```bash
+sudo apt install python3-smbus
+```
+
+To install uinput i had to installe synaptic package manager then do a manual search for uinput to install it. everytime i would install uinput through the terminal i would get an error and a message stating it was externally managed. so far this is the only way i found that worked.
+
+```bash
+sudo apt install synaptic
+```
+then open synaptic and search for "python3-uinput"
+
+## Clone the Git Repo
+
+clone this repository:
+
+```
+git clone https://github.com/ian-antking/cardkb.git
+```
+
+## Load the uinput module (i had to do modprobeuinput first)
 
 You will need to load the uinput module to allow python-uinput to input key presses. You can check if it is loaded with:
 
@@ -51,6 +102,7 @@ If nothing is displayed, then the module is not loaded. To load the module, run:
 ```bash
 modprobe uinput
 ```
+## Add Module to run automattically on startup
 
 To load the module automatically on startup, run:
 
@@ -59,25 +111,9 @@ sudo nano /etc/modules
 ```
 add `uinput` at the bottom of the file. Save and then reboot.
 
-## Install Software
 
-Install smbus and python-uinput:
 
-```bash
-sudo apt install python3-smbus
-```
-
-```bash
-sudo pip3 install python-uinput
-```
-
-clone this repository:
-
-```
-git clone https://github.com/ian-antking/cardkb.git
-```
-
-Run the script and check buttons return expected characters:
+## Run the script and check buttons return expected characters:
 
 ```bash
 sudo python3 cardkb &
@@ -89,7 +125,7 @@ By default, the python script listens to `/dev/i2c-1`, you can change this by ad
 sudo python3 cardkb 11 &
 ```
 
-## Running CardKB when Raspberry Pi starts
+## Add KB Service to run at startup (Run CardKB when Raspberry Pi starts)
 
 We can use systemd to run the CardKB script as a service. To do so, create a unit file:
 
@@ -112,14 +148,6 @@ ExecStart=/usr/bin/python3 /home/pi/cardkb
 WantedBy=multi-user.target
 ```
 
-This service file assumes that you have cloned the cardkb repo to /home/pi. If this is not the case, you will need to change the file path. 
-
-```
-...
-ExecStart=/usr/bin/python3 /home/ian/cardkb
-...
-```
-
 Likewise, if you are running cardkb on a i2c bus other than one, then you will need to add the bus number to the end of the `ExecStart` line like so:
 
 ```
@@ -128,7 +156,23 @@ ExecStart=/usr/bin/python3 /home/pi/cardkb 11
 ...
 ```
 
-Save the file and exit. Now run the following commands to reload the systemctl daemon, enable the cardkb service and restart the pi:
+Save the file and exit. 
+
+Additional info to add
+
+Note: I would like to Omit this part but if you need it, i will not leave it out. it was not neccessary for my setup.
+
+
+This service file assumes that you have cloned the cardkb repo to /home/pi. If this is not the case, you will need to change the file path. 
+
+```
+...
+ExecStart=/usr/bin/python3 /home/ian/cardkb
+...
+```
+
+Finally
+Now run the following commands to reload the systemctl daemon, enable the cardkb service and restart the pi:
 
 ```bash
 sudo systemctl daemon-reload
